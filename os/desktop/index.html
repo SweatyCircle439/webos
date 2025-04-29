@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>desktop</title>
+    <link rel="stylesheet" href="/style.css">
+    <script>
+        let inappmenu = false;
+        class app {
+            constructor(/** @type {String} */ name, imgurl, application) {
+                this.ontaskbar = false;
+                const namesplit = name.split(".");
+                namesplit.shift();
+                this.name = namesplit.join(".");
+                this.taskbarItem = document.createElement("div");
+                this.taskbarItem.dataset.open = "not";
+                this.taskbarItem.classList.add("app");
+                this.taskbaricon = document.createElement("img");
+                this.taskbaricon.src = imgurl;
+                this.taskbarItem.appendChild(this.taskbaricon);
+                this.open = false;
+                this.size = {
+                    width: 1000,
+                    height: 500
+                }
+                this.reactstouserinput = true;
+                this.pinned = false;
+                this.application = application;
+                this.open = async() => {
+                    this.windowid = await requestBrowser(`http://localhost:100${this.application}`, 0, 24, this.size.width, this.size.height);
+                    if (document.querySelector(".app[data-open=\"opened\"]")) {
+                        document.querySelector(".app[data-open=\"opened\"]").dataset.open = "background";
+                    }
+                    this.taskbarItem.dataset.open = "opened";
+                    closeappmenu();
+                    document.getElementById("eyes").src = "/assets/character/eyes.svg";
+                    if(!this.ontaskbar) {
+                        this.addToTaskbar();
+                    }
+                    const window = document.createElement("div");
+                    this.topbar = document.createElement("div");
+                    const topbarbuttons = document.createElement("div");
+                    const closebutton = document.createElement("button");
+                    closebutton.classList.add("topbarbutton");
+                    closebutton.classList.add("close");
+                    closebutton.height = "20";
+                    closebutton.width = "20";
+                    const minimizebutton = document.createElement("button");
+                    minimizebutton.classList.add("topbarbutton");
+                    minimizebutton.classList.add("minimize");
+                    minimizebutton.height = "20";
+                    minimizebutton.width = "20";
+                    minimizebutton.onclick = async() => {
+                        this.windowheight = await minimizeBrowser(this.windowid);
+                        this.topbar.style.display = "none";
+                        this.taskbarItem.dataset.open = "background";
+                        this.taskbarItem.onclick = this.minimizedfunction;
+                    }
+                    closebutton.onclick = async() => {
+                        await closeBrowser(this.windowid);
+                        this.taskbarItem.dataset.open = "not";
+                        this.topbar.remove();
+                    }
+                    topbarbuttons.append(minimizebutton, closebutton);
+                    topbarbuttons.classList.add("topbarbuttons");
+                    this.topbar.appendChild(topbarbuttons);
+                    this.topbar.classList.add("topbar");
+                    window.appendChild(this.topbar);
+                    window.draggable = true;
+                    window.id = `application.${name}.${Date.now()}`;
+                    window.ondragstart = e => {
+                        e.dataTransfer.setData("Text", e.target.id);
+                    }
+                    window.style.width = `${this.size.width - 4}px`;
+                    window.style.height = `24px`;
+                    document.body.appendChild(window);
+                }
+                this.minimizedfunction = () => {
+                    this.topbar.style.display = "block";
+                    this.taskbarItem.dataset.open = "opened";
+                    maximizeBrowser(this.windowid, this.windowheight);
+                    this.taskbarItem.onclick = this.open;
+                }
+                
+                this.taskbarItem.onclick = this.open;
+                this.addToTaskbar = () => {
+                    document.getElementById("taskbar").appendChild(this.taskbarItem);
+                    this.ontaskbar = true;
+                };
+            }
+        }
+        const apps = {
+            system: {
+                task_manager: new app(
+                    "system.task manager",
+                    "/assets/apps/task_manager.svg",
+                    "/apps/task_manager.html"
+                ),
+                console: new app(
+                    "system.console",
+                    "/assets/apps/console.svg",
+                    "/apps/console.html"
+                ),
+                settings: new app(
+                    "system.settings",
+                    "/assets/apps/settings.svg",
+                    "/apps/settings.html"
+                ),
+                vm: new app(
+                    "system.vm",
+                    "/assets/apps/settings.svg",
+                    "/desktop"
+                )
+            },
+            WebOS_default_apps: {
+                browser: new app(
+                    "WebOS_default_apps.webOS browse",
+                    "/assets/apps/browser.svg",
+                    "/apps/browser.html"
+                ),
+                texter: new app(
+                    "WebOS_default_apps.texter",
+                    "/assets/apps/texter.svg",
+                    "/apps/texter.html"
+                )
+            },
+            WebOS_apps: {
+                melon: new app(
+                    "WebOS_apps.melon",
+                    "/assets/apps/melon.png",
+                    "/apps/melon.html"
+                )
+            }
+        }
+        function appmenu() {
+            document.getElementById("eyes").src = "/assets/logo/logo.png";
+            document.getElementById("appmenu").classList.add("open");
+            inappmenu = true;
+        }
+        function closeappmenu() {
+            document.getElementById("eyes").src = "/assets/character/eyes.svg";
+            document.getElementById("appmenu").classList.remove("open");
+            inappmenu = false;
+        }
+        function toggleappmenu() {
+            if (inappmenu) {
+                closeappmenu();
+            }else{
+                appmenu();
+            }
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+            document.addEventListener("keyup", e => {
+                if (e.key == "Alt") {
+                    toggleappmenu();
+                }
+                console.log(e.key);
+            });
+            document.getElementById("pet").addEventListener("click", () => {
+                toggleappmenu();
+            });
+            document.addEventListener("mousemove", e => {
+                const eyes = document.getElementById("eyes");
+                eyes.style.left = (e.clientX <= 17 ? e.clientX : 17) + "px";
+                eyes.style.top = ((e.clientY - (window.innerHeight - 30)) >= 5 ? e.clientY - (window.innerHeight - 30) : 5) + "px";
+            });
+            apps.system.settings.addToTaskbar();
+            apps.system.console.addToTaskbar();
+            apps.system.task_manager.addToTaskbar();
+            for (const namespace in apps) {
+                const fieldset = document.createElement('fieldset');
+                const legend = document.createElement('legend');
+                legend.innerText = namespace;
+                fieldset.appendChild(legend);
+                fieldset.style.display = 'flex';
+                for (const app in apps[namespace]) {
+                    const appelement = apps[namespace][app].taskbaricon.cloneNode();
+                    appelement.style.width = "50px";
+                    appelement.style.height = "50px";
+                    appelement.style.marginLeft = "10px";
+                    appelement.style.pointerEvents = "all";
+                    appelement.onclick = apps[namespace][app].taskbarItem.onclick
+                    fieldset.appendChild(appelement);
+                }
+                document.getElementById("appmenu").appendChild(fieldset);
+            }
+        });
+    </script>
+    <style>
+        .taskbar {
+            background-color: rgba(255, 255, 255, 0.108);
+            border: 1px solid white;
+            backdrop-filter: blur(10px);
+            position: absolute;
+            bottom: 0px;
+            left: 0px;
+            width: 100vw;
+            height: 50px;
+            overflow-y: hidden;
+            display: flex;
+        }
+        .pet {
+            background-image: url(/assets/character/body.svg);
+            width: 50px;
+            height: 50px;
+            background-size: 50px;
+            background-position: center middle;
+            background-repeat: no-repeat;
+            overflow: hidden;
+        }
+        .eyes {
+            position: absolute;
+            overflow: hidden;
+        }
+        .appmenu {
+            position: absolute;
+            bottom: -100vh;
+            left: 50%;
+            width: 50%;
+            transform: translate(-50%, 0%);
+            height: 80vh;
+            background-color: rgba(255, 255, 255, 0.108);
+            box-shadow: 2px 2px 31px 0px rgba(0,0,0,0.75);
+            backdrop-filter: blur(30px);
+            z-index: 1000;
+            border-radius: 25px;
+            transition: bottom ease-out 1s;
+            & fieldset {
+                border: none;
+                border-radius: 25px;
+                background-color: rgba(255, 255, 255, 0.108);
+                backdrop-filter: blur(10px);
+                color: white;
+            }
+            &.open {
+                bottom: 55px;
+            }
+        }
+        .app {
+            height: 50px;
+            width: 50px;
+            overflow-y: hidden;
+            margin-left: 10px;
+        }
+        .app[data-open="background"] {
+            background-color: rgba(255, 255, 255, 0.29);
+            height: 50px;
+            width: 50px;
+            overflow-y: hidden;
+        }
+        .app[data-open="opened"]{
+            background-color: rgba(255, 255, 255, 0.5);
+            height: 50px;
+            width: 50px;
+            overflow-y: hidden;
+        }
+        .app img {
+            width: 99%;
+            height: 99%;
+        }
+        .topbar {
+            background-color: rgb(34, 34, 34);
+            padding: 2px;
+            width: 100%;
+            height: 100%;
+        }
+        .topbarbuttons {
+            width: fit-content;
+            float: right;
+            display: flex;
+            gap: 5px;
+        }
+        .topbarbutton {
+            cursor: pointer;
+            height: 20px;
+            border: none;
+            background-color: transparent;
+            aspect-ratio: 1 / 1;
+            &.close {
+                background: url(/assets/icons/close.svg);
+                background-size: 100% 100%;
+            }
+            &.minimize {
+                background: url(/assets/icons/minimize.svg);
+                background-size: 100% 100%;
+            }
+            &:hover {
+                aspect-ratio: 2 / 1;
+                transition: aspect-ratio ease-in-out 0.1s;
+            }
+        }
+        body {
+            overflow: hidden;
+            background: url(/assets/backgrounds/purpleriver.png);
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body ondrop="
+let data = event.dataTransfer.getData('Text');
+/** @type {HTMLDivElement} */
+const window = document.getElementById(data);
+window.style.position = 'absolute';
+window.style.left = event.clientX + 'px';
+window.style.top = event.clientY + 'px';
+event.target.appendChild(document.getElementById(data));
+event.preventDefault();
+" ondragover="event.preventDefault();">
+    <div id="taskbar" class="taskbar">
+        <div id="pet" class="pet">
+            <img id="eyes" class="eyes" src="/assets/character/eyes.svg" width="30px">
+        </div>
+    </div>
+    <div id="appmenu" class="appmenu"></div>
+</body>
+</html>

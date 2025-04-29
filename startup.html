@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>starting...</title>
+    <script src="/lib/background.js/background.js.js"></script>
+    <link rel="stylesheet" href="/lib/background.js/background.js.css">
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        body{
+            pointer-events: none;
+        }
+    </style>
+    <script>
+        setTimeout(() => {
+            window.location.assign("/login");
+        }, 5000);
+    </script>
+</head>
+<body>
+    <div class="center">
+        <img src="/assets/logo/logo.png" alt="" width="250px">
+        <h1>webOS is starting...</h1>
+    </div>
+</body>
+</html>

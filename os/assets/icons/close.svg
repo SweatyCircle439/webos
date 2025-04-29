@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:realworld="http://www.rw-designer.com/export-svg" width="512px" height="512px">
+  <g inkscape:groupmode="layer" inkscape:label="layer 0">
+    <ellipse cx="257.306" cy="256" fill="#ff6800" realworld:stroke-pos="-1" rx="251.38" ry="251.38" stroke="#c50000" stroke-linejoin="round" stroke-width="20" />
+  </g>
+  <g inkscape:groupmode="layer" inkscape:label="layer 1">
+    <rect fill="#ffffff" height="84.898" realworld:stroke-pos="-1" stroke="#c50000" stroke-linejoin="round" stroke-width="20" transform="translate(252.012,259.409) rotate(40.0233) translate(-252.012,-259.409)" width="478.748" x="12.638" y="216.96" />
+  </g>
+  <g inkscape:groupmode="layer" inkscape:label="layer 1">
+    <rect fill="#dbdbd9" height="15.6901" transform="translate(261.324,247.858) rotate(40.0233) translate(-261.324,-247.858)" width="438.824" x="41.912" y="240.013" />
+  </g>
+  <g inkscape:groupmode="layer" inkscape:label="layer 2">
+    <rect fill="#ffffff" height="79.6734" realworld:stroke-pos="-1" stroke="#c50000" stroke-linejoin="round" stroke-width="20" transform="translate(257.11,255.051) rotate(-49.9589) translate(-257.11,-255.051)" width="484.122" x="15.049" y="215.214" />
+  </g>
+  <g inkscape:groupmode="layer" inkscape:label="layer 3">
+    <rect fill="#dbdbdb" height="18.3845" transform="translate(248.603,247.057) rotate(-49.9589) translate(-248.603,-247.057)" width="445.348" x="25.929" y="237.865" />
+  </g>
+</svg>

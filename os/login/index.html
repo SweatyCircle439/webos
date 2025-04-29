@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>starting...</title>
+    <script src="/lib/background.js/background.js.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="/lib/background.js/background.js.css">
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        input,select {
+            margin-top: 10px;
+            background-color: rgba(255, 255, 255, 0.532);
+            padding: 10px 100px;
+            text-align: center;
+            color: white;
+        }
+        .error {
+            color: white;
+            background-color: red;
+            display: none;
+        }
+        .login {
+            display: none;
+        }
+        dialog {
+            background-color: black;
+            color: white;
+        }
+    </style>
+    <script>
+        const socket = io();
+        function WOS1_FTLU_FIX() {
+            document.getElementById('WOS1_FTLU_FIX_window').showModal();
+        }
+        function WOS1_FTLU_FIX_continue() {
+            socket.emit("fix-users", {
+                username: document.getElementById("WOS1_FTLU_FIX_username").value,
+                password: document.getElementById("WOS1_FTLU_FIX_password").value
+            });
+            window.location.reload();
+        }
+        function next() {
+            document.getElementById("login").style.display = "none";
+            document.getElementById("passwordenter").style.display = "block";
+        }
+        function login() {
+            console.log("logging in...");
+            function getsessid() {
+                const cookies = document.cookie.split(";");
+                for (const cookie of cookies) {
+                    if (cookie.split("=")[0] == "sessid") {
+                        return cookie.split("=")[1];
+                    }
+                }
+            }
+            socket.emit("login", {
+                username: document.getElementById("users").value,
+                password: document.getElementById("password").value,
+                sessid: getsessid()
+            });
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+            socket.on("loaded", msg => {
+                for (const username of msg) {
+                    const option = document.createElement("option");
+                    option.value = username;
+                    option.innerText = username;
+                    document.getElementById("users").appendChild(option);
+                }
+                document.getElementById("login").style.display = "block";
+            });
+            socket.emit("load", {
+                load: "users"
+            });
+            socket.on("error", msg => {
+                document.querySelector(".error").innerHTML = msg;
+                document.querySelector(".error").style.display = "block";
+            });
+            socket.on("login", msg => {
+                if (msg == "success") {
+                    window.location.assign("/desktop");
+                }else {
+                    window.location.reload();
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <dialog id="WOS1_FTLU_FIX_window">
+        <h1>create user</h1>
+        please create a user to access your device<br>
+        <input type="text" id="WOS1_FTLU_FIX_username" placeholder="username"><br>
+        <input type="password" id="WOS1_FTLU_FIX_password" placeholder="password">
+        <button onclick="WOS1_FTLU_FIX_continue()">create</button>
+    </dialog>
+    <div class="center">
+        <img src="/assets/logo/logo.png" alt="" width="250px"><br>
+        <div class="error"></div>
+        <div id="login" class="login">
+            <select name="username" id="users"></select><br>
+            <button onclick="next()">next</button>
+        </div>
+        <div id="passwordenter" class="login">
+            <input type="password" id="password" placeholder="password">
+            <button onclick="login()">sign in</button>
+        </div>
+    </div>
+</body>
+</html>

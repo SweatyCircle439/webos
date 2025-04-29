@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:realworld="http://www.rw-designer.com/export-svg" width="192px" height="181px">
+  <g>
+    <path d="M 144.647 152.607C 96.4693 154.871 18.8065 154.393 18.8065 154.393L 18.9984 23.2464C 18.9984 23.2464 58.4386 33.3251 97.2697 33.3823C 136.26 33.4398 175.411 38.9376 175.411 38.9376L 181.068 146.731C 181.068 146.731 168.397 151.49 144.647 152.607 z" fill="#333333" fill-rule="evenodd" stroke="#000000" stroke-width="9.41235" />
+    <path d="M 39.548 62.4977L 98.2369 61.6766" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-width="9.41235" />
+    <path d="M 154.279 72.8541L 121.214 63.0852L 148.626 43.0315" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-width="9.41235" />
+    <path d="M 131.722 123.267L 110.718 141.114L 71.8317 138.843L 57.9114 119.822" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-width="9.41235" />
+  </g>
+</svg>

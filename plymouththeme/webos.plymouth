@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=webos
+Description=webos splash screen
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/webos
+ScriptFile=/usr/share/plymouth/themes/webos/webos.script
